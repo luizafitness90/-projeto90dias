@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>ÂNCORA</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f3ef;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #2f2f2f;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #d4af37;
+    padding: 10px;
+}
+
+nav button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+section {
+    padding: 20px;
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+button {
+    padding: 8px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<header>⚓ ÂNCORA</header>
+
+<nav>
+    <button onclick="showTab('home')">Início</button>
+    <button onclick="showTab('treino')">Treino</button>
+    <button onclick="showTab('cardio')">Cardio</button>
+    <button onclick="showTab('financeiro')">Financeiro</button>
+    <button onclick="showTab('ciclo')">Ciclo</button>
+    <button onclick="showTab('conselheira')">Conselheira</button>
+</nav>
+
+<section id="home" class="active">
+    <div class="card">
+        <h3>Bem-vinda, Luiza ♊</h3>
+        <p>Organize mente, corpo e dinheiro.</p>
+    </div>
+</section>
+
+<section id="treino">
+    <div class="card">
+        <h3>Treino – Fase 2</h3>
+        <p id="treinoTexto">
+        Supino inclinado 4x10<br>
+        Flexão elevada 3x10<br>
+        Crucifixo inclinado 3x12<br>
+        Elevação lateral 3x15
+        </p>
+        <button onclick="aumentarCarga()">Marcar como Leve</button>
+        <p id="cargaStatus"></p>
+    </div>
+</section>
+
+<section id="cardio">
+    <div class="card">
+        <h3>Corrida ao Ar Livre</h3>
+        <button onclick="startTimer()">Iniciar</button>
+        <button onclick="stopTimer()">Parar</button>
+        <p id="tempo">00:00</p>
+    </div>
+</section>
+
+<section id="financeiro">
+    <div class="card">
+        <h3>Fundo de Liberdade</h3>
+        <input type="number" id="valorImpulso" placeholder="Quanto quase gastou?">
+        <button onclick="registrarImpulso()">Transformar em Economia</button>
+        <p id="fundoTotal">Total guardado: R$0</p>
+    </div>
+</section>
+
+<section id="ciclo">
+    <div class="card">
+        <h3>Ciclo & Energia</h3>
+        <input type="date" id="dataInicio">
+        <button onclick="calcularFase()">Ver Fase</button>
+        <p id="faseResultado"></p>
+    </div>
+</section>
+
+<section id="conselheira">
+    <div class="card">
+        <h3>Desabafar</h3>
+        <textarea id="desabafo" rows="4" style="width:100%;"></textarea>
+        <button onclick="responder()">Enviar</button>
+        <p id="resposta"></p>
+    </div>
+</section>
+
+<script>
+let carga = 0;
+function showTab(tab) {
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById(tab).classList.add("active");
+}
+
+function aumentarCarga() {
+    carga += 2.5;
+    document.getElementById("cargaStatus").innerText =
+    "Próxima sessão aumentará +2.5kg. Carga acumulada: " + carga + "kg";
+}
+
+let timer;
+let segundos = 0;
+function startTimer(){
+    timer = setInterval(() => {
+        segundos++;
+        let min = Math.floor(segundos/60);
+        let seg = segundos%60;
+        document.getElementById("tempo").innerText =
+        (min<10?"0":"")+min+":"+(seg<10?"0":"")+seg;
+    },1000);
+}
+function stopTimer(){
+    clearInterval(timer);
+}
+
+let fundo = 0;
+function registrarImpulso(){
+    let valor = parseFloat(document.getElementById("valorImpulso").value);
+    if(!isNaN(valor)){
+        fundo += valor;
+        document.getElementById("fundoTotal").innerText =
+        "Total guardado: R$"+fundo;
+    }
+}
+
+function calcularFase(){
+    let inicio = new Date(document.getElementById("dataInicio").value);
+    let hoje = new Date();
+    let diff = Math.floor((hoje - inicio)/(1000*60*60*24));
+    let fase = diff % 28 <= 14 ? "Fase Folicular" : "Fase Lútea";
+    document.getElementById("faseResultado").innerText = fase;
+}
+
+function responder(){
+    let texto = document.getElementById("desabafo").value;
+    document.getElementById("resposta").innerText =
+    "Respira. Vamos organizar isso: qual é o menor passo possível agora?";
+}
+</script>
+
+</body>
+</html>
