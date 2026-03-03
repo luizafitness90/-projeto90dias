@@ -1,96 +1,156 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projeto 90 Dias - Luiza</title>
+  <title>Projeto Carnaval 2027</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-font-family: Arial, sans-serif;
-background: linear-gradient(to bottom, #ffe6f0, #ffffff);
-margin:0;
-padding:20px;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+    }
 
-.container{
-max-width:400px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
-}
+    header {
+      background: linear-gradient(90deg, #ff0055, #ff9900);
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
 
-h1{
-text-align:center;
-color:#e91e63;
-}
+    .container {
+      padding: 20px;
+      text-align: center;
+    }
 
-input{
-width:100%;
-padding:8px;
-margin:5px 0;
-border-radius:10px;
-border:1px solid #ccc;
-}
+    .card {
+      background: #1a1a1a;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255,0,80,0.3);
+    }
 
-button{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:15px;
-background:#e91e63;
-color:white;
-font-weight:bold;
-}
+    button {
+      background: #ff0055;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      margin-top: 10px;
+    }
 
-.progress{
-margin-top:15px;
-font-weight:bold;
-color:#444;
-}
-</style>
+    iframe {
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #111;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    .nav button {
+      background: none;
+      color: white;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
+<header>
+🔥 Projeto Carnaval 2027 🔥
+</header>
+
 <div class="container">
-<h1>Projeto 90 Dias 💖</h1>
 
-<label>Peso (kg)</label>
-<input type="number" id="peso">
+  <div id="home">
 
-<label>Cintura (cm)</label>
-<input type="number" id="cintura">
+    <div class="card">
+      <h2>⏳ Contagem para o Carnaval 2027</h2>
+      <p id="contador"></p>
+    </div>
 
-<label>Quadril (cm)</label>
-<input type="number" id="quadril">
+    <div class="card">
+      <h2>🏋️ Ciclo de Treino</h2>
+      <p id="treino">Clique para gerar seu treino</p>
+      <button onclick="gerarTreino()">Gerar Novo Ciclo</button>
+    </div>
 
-<label>Carga Agachamento (kg)</label>
-<input type="number" id="agachamento">
+  </div>
 
-<label>Carga Elevação Pélvica (kg)</label>
-<input type="number" id="elevacao">
+  <div id="videos" class="hidden">
+    <div class="card">
+      <h2>🎥 Vídeo do Exercício</h2>
+      <iframe width="300" height="200"
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
 
-<button onclick="salvar()">Salvar Dia</button>
+  <div id="musica" class="hidden">
+    <div class="card">
+      <h2>🎵 Música do Treino</h2>
+      <iframe width="300" height="200"
+        src="https://www.youtube.com/embed/jfKfPfyJRdk">
+      </iframe>
+    </div>
+  </div>
 
-<div class="progress" id="contador"></div>
+</div>
+
+<div class="nav">
+  <button onclick="mostrar('home')">🏠 Início</button>
+  <button onclick="mostrar('videos')">🎥 Vídeos</button>
+  <button onclick="mostrar('musica')">🎵 Música</button>
 </div>
 
 <script>
-let dias = localStorage.getItem("dias") || 0;
-document.getElementById("contador").innerHTML = 
-"Dia atual: " + dias + " de 90";
-
-function salvar(){
-dias++;
-localStorage.setItem("dias", dias);
-document.getElementById("contador").innerHTML = 
-"Dia atual: " + dias + " de 90";
-alert("Dia salvo com sucesso 💖 Continue firme!");
+function mostrar(secao) {
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('videos').classList.add('hidden');
+  document.getElementById('musica').classList.add('hidden');
+  document.getElementById(secao).classList.remove('hidden');
 }
+
+function gerarTreino() {
+  const treinos = [
+    "Peito + Tríceps + HIIT",
+    "Costas + Bíceps + Cardio",
+    "Pernas + Glúteo + Funcional",
+    "Ombro + Abdômen + Sprints",
+    "Full Body + Alta Intensidade"
+  ];
+  const sorteado = treinos[Math.floor(Math.random() * treinos.length)];
+  document.getElementById("treino").innerText = sorteado;
+}
+
+function atualizarContador() {
+  const dataCarnaval = new Date("Feb 15, 2027 00:00:00").getTime();
+  const agora = new Date().getTime();
+  const distancia = dataCarnaval - agora;
+
+  const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+  document.getElementById("contador").innerText = dias + " dias restantes!";
+}
+
+setInterval(atualizarContador, 1000);
 </script>
 
 </body>
