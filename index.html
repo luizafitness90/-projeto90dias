@@ -1,156 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>Projeto Carnaval 2027</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeto Carnaval 2027</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: white;
-    }
+<link rel="manifest" href="manifest.json">
 
-    header {
-      background: linear-gradient(90deg, #ff0055, #ff9900);
-      padding: 20px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    .container {
-      padding: 20px;
-      text-align: center;
-    }
-
-    .card {
-      background: #1a1a1a;
-      padding: 20px;
-      margin: 15px 0;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(255,0,80,0.3);
-    }
-
-    button {
-      background: #ff0055;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      color: white;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    iframe {
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    .nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #111;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-    }
-
-    .nav button {
-      background: none;
-      color: white;
-      font-size: 14px;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+<style>
+body{
+  font-family: Arial;
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+}
+.nav{
+  display:flex;
+  justify-content:space-around;
+  background:#111;
+  padding:10px;
+}
+button{
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  background:#ff0055;
+  color:white;
+  cursor:pointer;
+}
+.hidden{display:none;}
+.card{
+  background:#1a1a1a;
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+}
+input{
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  margin:5px;
+}
+</style>
 </head>
-
 <body>
-
-<header>
-🔥 Projeto Carnaval 2027 🔥
-</header>
-
-<div class="container">
-
-  <div id="home">
-
-    <div class="card">
-      <h2>⏳ Contagem para o Carnaval 2027</h2>
-      <p id="contador"></p>
-    </div>
-
-    <div class="card">
-      <h2>🏋️ Ciclo de Treino</h2>
-      <p id="treino">Clique para gerar seu treino</p>
-      <button onclick="gerarTreino()">Gerar Novo Ciclo</button>
-    </div>
-
-  </div>
-
-  <div id="videos" class="hidden">
-    <div class="card">
-      <h2>🎥 Vídeo do Exercício</h2>
-      <iframe width="300" height="200"
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-        allowfullscreen>
-      </iframe>
-    </div>
-  </div>
-
-  <div id="musica" class="hidden">
-    <div class="card">
-      <h2>🎵 Música do Treino</h2>
-      <iframe width="300" height="200"
-        src="https://www.youtube.com/embed/jfKfPfyJRdk">
-      </iframe>
-    </div>
-  </div>
-
-</div>
 
 <div class="nav">
   <button onclick="mostrar('home')">🏠 Início</button>
-  <button onclick="mostrar('videos')">🎥 Vídeos</button>
-  <button onclick="mostrar('musica')">🎵 Música</button>
+  <button onclick="mostrar('corrida')">🏃 Corrida</button>
+</div>
+
+<div id="home">
+  <div class="card">
+    <h2>🔥 Projeto Carnaval 2027</h2>
+    <p>Evolução contínua até o Carnaval.</p>
+  </div>
+</div>
+
+<div id="corrida" class="hidden">
+  <div class="card">
+    <h2>🏃 Projeto Corridas</h2>
+
+    <h3>⏱ Cronômetro</h3>
+    <p id="cronometro">0</p>
+    <button onclick="iniciar()">Iniciar</button>
+    <button onclick="parar()">Parar</button>
+
+    <h3>Registrar corrida</h3>
+    <input type="number" id="km" placeholder="Km">
+    <button onclick="salvarCorrida()">Salvar</button>
+
+    <p id="ritmo"></p>
+
+    <h3>📊 Meta mensal</h3>
+    <p id="meta"></p>
+
+    <canvas id="grafico"></canvas>
+
+    <h3>📜 Histórico</h3>
+    <ul id="lista"></ul>
+  </div>
 </div>
 
 <script>
-function mostrar(secao) {
-  document.getElementById('home').classList.add('hidden');
-  document.getElementById('videos').classList.add('hidden');
-  document.getElementById('musica').classList.add('hidden');
-  document.getElementById(secao).classList.remove('hidden');
+function mostrar(secao){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("corrida").classList.add("hidden");
+  document.getElementById(secao).classList.remove("hidden");
 }
 
-function gerarTreino() {
-  const treinos = [
-    "Peito + Tríceps + HIIT",
-    "Costas + Bíceps + Cardio",
-    "Pernas + Glúteo + Funcional",
-    "Ombro + Abdômen + Sprints",
-    "Full Body + Alta Intensidade"
-  ];
-  const sorteado = treinos[Math.floor(Math.random() * treinos.length)];
-  document.getElementById("treino").innerText = sorteado;
+let tempo = 0;
+let intervalo;
+
+function iniciar(){
+  intervalo = setInterval(()=>{
+    tempo++;
+    document.getElementById("cronometro").innerText = tempo + " s";
+  },1000);
 }
 
-function atualizarContador() {
-  const dataCarnaval = new Date("Feb 15, 2027 00:00:00").getTime();
-  const agora = new Date().getTime();
-  const distancia = dataCarnaval - agora;
-
-  const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-  document.getElementById("contador").innerText = dias + " dias restantes!";
+function parar(){
+  clearInterval(intervalo);
 }
 
-setInterval(atualizarContador, 1000);
+function salvarCorrida(){
+  const km = parseFloat(document.getElementById("km").value);
+  if(!km || tempo==0) return;
+
+  const minutos = tempo/60;
+  const ritmo = (minutos/km).toFixed(2);
+
+  let corridas = JSON.parse(localStorage.getItem("corridas")) || [];
+  corridas.push({km, minutos, ritmo});
+  localStorage.setItem("corridas", JSON.stringify(corridas));
+
+  document.getElementById("ritmo").innerText = "Ritmo: "+ritmo+" min/km";
+
+  tempo=0;
+  document.getElementById("cronometro").innerText="0";
+
+  carregar();
+}
+
+function carregar(){
+  const lista = document.getElementById("lista");
+  lista.innerHTML="";
+  let corridas = JSON.parse(localStorage.getItem("corridas")) || [];
+
+  let totalMes = 0;
+  corridas.forEach(c=>{
+    totalMes+=c.km;
+    let li=document.createElement("li");
+    li.innerText = c.km+" km - "+c.minutos.toFixed(1)+" min - Ritmo "+c.ritmo;
+    lista.appendChild(li);
+  });
+
+  document.getElementById("meta").innerText = 
+  "Total no mês: "+totalMes+" km (Meta: 50 km)";
+
+  gerarGrafico(corridas);
+}
+
+function gerarGrafico(corridas){
+  const ctx=document.getElementById("grafico");
+  new Chart(ctx,{
+    type:"line",
+    data:{
+      labels:corridas.map((c,i)=>"Treino "+(i+1)),
+      datasets:[{
+        label:"Km",
+        data:corridas.map(c=>c.km),
+        borderColor:"#ff0055",
+        fill:false
+      }]
+    }
+  });
+}
+
+window.onload=carregar;
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("service-worker.js");
+}
 </script>
 
 </body>
